@@ -16,6 +16,7 @@ const schema = z.object({
     product_description: z.string(),
     product_sustainability: z.string(),
     product_quality: z.string(),
+    product_decision: z.string(),
 });
 
 app.post('/scrape', async (req, res) => {
@@ -33,7 +34,8 @@ app.post('/scrape', async (req, res) => {
             any official listed sustainability/ethics information from the seller,
             and any comments by reviewers, if available. If this is not found, tell the user that they should look into the sustainability of the
             product as it was not explicitly mentioned, which may be a red flag.
-            Obtain information about product quality by weighing the pros and cons of user reviews, especially looking for longevity and ease of use information.`,
+            Obtain information about product quality by weighing the pros and cons of user reviews, especially looking for longevity and ease of use information.
+            Obtain information about product decision by using all of the information obtained, like price and quality and sustainability, to come to a brief conclusion on whether or not a user should buy the product and briefly give a reason why.`,
             schema: schema,
         });
 

@@ -24,8 +24,8 @@ export default function EnterText() {
     navigation.navigate('displayResults', {urls: urls, text: text})
   };
 
-  const apiKey = 'AIzaSyAJoqZjTaabNOYUR3HVGaeTHD_-jjzadCg';
-  const cx = 'c6bd6833b44bd4211';
+  const apiKey = 'AIzaSyBgQC6RQaSIfTC0kVjoKi01tGSev228Pik';
+  const cx = 'e20842139757042ae';
 
   const getUrls = async (input: string) => {
     try {
@@ -42,7 +42,7 @@ export default function EnterText() {
       await handleScrape(urls); 
       setDone(true);
     } catch (error) {
-      console.error('Invalid Input. Please Try Again');
+      console.error('Invalid Input. Please Try Again', error);
       setDone(true);
     } finally {
       setLoading(false);

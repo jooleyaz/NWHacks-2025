@@ -18,8 +18,8 @@ export default function DisplayResults() {
     console.log(route, " this is the line");
     const { urls, text } = route.params;
 
-    const apiKey = 'AIzaSyAJoqZjTaabNOYUR3HVGaeTHD_-jjzadCg';
-    const cx = 'c6bd6833b44bd4211';
+    const apiKey = 'AIzaSyBgQC6RQaSIfTC0kVjoKi01tGSev228Pik';
+    const cx = 'e20842139757042ae';
 
     const [imageUri, setImageUri] = useState<string | null>(null);
 
@@ -28,6 +28,7 @@ export default function DisplayResults() {
         product_description: '',
         product_sustainability: '',
         product_quality: '',
+        product_decision: '',
     });
 
     const [isLoading, setIsLoading] = useState(false);
@@ -91,6 +92,9 @@ export default function DisplayResults() {
                 </ThemedText>
                 <ThemedText style={styles.text}>
                     <Text style={styles.subtext}>Quality:</Text> {productData.product_quality}
+                </ThemedText>
+                <ThemedText style={styles.text}>
+                    <Text style={styles.subtext}>Should I buy it?</Text> {productData.product_decision}
                 </ThemedText>
             </View>
         </View>

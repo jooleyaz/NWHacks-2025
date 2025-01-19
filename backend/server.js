@@ -18,22 +18,15 @@ const schema = z.object({
     product_quality: z.string(),
 });
 
-app.post('/extract', async (req, res) => {
-    const [url] = req.body;
+app.post('/scrape', async (req, res) => {
+    console.log(req.body)
+    const { url } = req.body;
 
     try {
-        // for (item in url) {
-        //     const testScrape = await firecrawlApp.scrapeUrl(url, { formats: ['markdown'] });
-        //     if (!testScrape.success) {
-        //         const index = url.indexOf(item)
-        //         if (index > -1) { // only splice array when item is found
-        //             array.splice(index, 1); // 2nd parameter means remove one item only
-        //         }
-        //     }
-        // }
+        console.log(url)
 
-        const scrapeResult = await firecrawlApp.extract(url, {
-            prompt: `Find information about the product from the URLs given. 
+        const scrapeResult = await firecrawlApp.extract([url], {
+            prompt: `Find information about the product from the URL given. 
             Obtain the price from the official seller.
             Obtain the product description from the official seller.
             Obtain information about how sustainable and ethical the product is by examining information about the manufacturer,

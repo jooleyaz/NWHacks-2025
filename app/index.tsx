@@ -7,7 +7,6 @@ import { PaperProvider } from 'react-native-paper';
 import axios from 'axios';
 
 import { scrapeProductData } from '@/utils/scrape';
-import dotenv from "dotenv";
 
 export default function EnterText() {
   const navigation = useNavigation<any>();
@@ -22,14 +21,16 @@ export default function EnterText() {
 
   const handleScrape = (urls : string[]) => {
     console.log(urls, " right before")
-    navigation.navigate('displayResults', {urls: urls,})
+    navigation.navigate('displayResults', {urls: urls})
   };
 
-dotenv.config();
+  // const handleScrape = (url: string[], params: string[]) => {
+  //   scrapeProductData(url, setProductData); // Pass setProductData to update state after scraping
+  // };
 
 
-  const apiKey = process.env.apiKey;
-  const cx = process.env.cx;
+  const apiKey = 'AIzaSyAJoqZjTaabNOYUR3HVGaeTHD_-jjzadCg';
+  const cx = 'c6bd6833b44bd4211';
 
   const getUrls = async (input: string) => {
     try {
@@ -41,7 +42,7 @@ dotenv.config();
         },
       });
       const searchResults = response.data.items || [];
-      const urls = searchResults.map((item: { link: string }) => item.link).slice(0, 1);
+      const urls = searchResults.map((item: { link: string }) => item.link).slice(0, 3);
       console.log(urls);
       await handleScrape(urls); 
       setDone(true);

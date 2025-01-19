@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-export const scrapeProductData = async (url: string[], setProductData: React.Dispatch<React.SetStateAction<any>>) => {
+export const scrapeProductData = async (url: string, setProductData: React.Dispatch<React.SetStateAction<any>>) => {
         try {
             console.log("URL payload:", url);
-            const response = await axios.post('http://206.87.193.193:3000/extract', url); // problem
+            const response = await axios.post('http://206.87.193.193:3000/scrape', {url}); // problem
             console.log(response.data);
             setProductData({
                 product_price: response.data.product_price,

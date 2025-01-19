@@ -1,8 +1,9 @@
 import axios from 'axios';
 
-export const scrapeProductData = async (url: string, setProductData: React.Dispatch<React.SetStateAction<any>>) => {
+export const scrapeProductData = async (url: string, setProductData: React.Dispatch<React.SetStateAction<any>>, setIsLoading: React.Dispatch<React.SetStateAction<any>>) => {
         try {
             console.log("URL payload:", url);
+            setIsLoading(true);
             const response = await axios.post('http://206.87.193.193:3000/scrape', {url}); // problem
             console.log(response.data);
             setProductData({
@@ -11,6 +12,7 @@ export const scrapeProductData = async (url: string, setProductData: React.Dispa
                 product_sustainability: response.data.product_sustainability || 'No data available',
                 product_quality: response.data.product_quality || 'No data available',
             });
+            setIsLoading(false);
             return true;
         } catch (error) {
             console.error("Scraping failed:", error);

@@ -1,9 +1,9 @@
-import { StyleSheet, Image, Pressable, TextInput, Button, ActivityIndicator } from 'react-native';
-import { useState } from 'react';
+import { StyleSheet, Image, Pressable, ActivityIndicator, View } from 'react-native';
+import { useState, useEffect} from 'react';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { PaperProvider } from 'react-native-paper';
+import { PaperProvider, Text, Button, TextInput } from 'react-native-paper';
 import axios from 'axios';
 
 import { scrapeProductData } from '@/utils/scrape';
@@ -21,13 +21,8 @@ export default function EnterText() {
 
   const handleScrape = (urls : string[]) => {
     console.log(urls, " right before")
-    navigation.navigate('displayResults', {urls: urls})
+    navigation.navigate('displayResults', {urls: urls, text: text})
   };
-
-  // const handleScrape = (url: string[], params: string[]) => {
-  //   scrapeProductData(url, setProductData); // Pass setProductData to update state after scraping
-  // };
-
 
   const apiKey = 'AIzaSyAJoqZjTaabNOYUR3HVGaeTHD_-jjzadCg';
   const cx = 'c6bd6833b44bd4211';
@@ -43,11 +38,11 @@ export default function EnterText() {
       });
       const searchResults = response.data.items || [];
       const urls = searchResults.map((item: { link: string }) => item.link).slice(0, 3);
-      console.log(urls);
+      
       await handleScrape(urls); 
       setDone(true);
     } catch (error) {
-      console.error('Error fetching search results:', error);
+      console.error('Invalid Input. Please Try Again');
       setDone(true);
     } finally {
       setLoading(false);
@@ -63,41 +58,19 @@ export default function EnterText() {
   return (
     // <PaperProvider>
     <ThemedView style={styles.allContainer}>
-      <ThemedText type="title">Search product by name</ThemedText>
+      <Text variant="titleLarge">Search product by name</Text>
       <TextInput
+        mode="outlined"
         placeholder="Type something..."
         value={text}
         onChangeText={(value) => setText(value)}
+        style={styles.textInput}
       />
-      <ThemedText style={styles.output}>You typed: {text}</ThemedText>
       {loading ? (
         <ThemedText>Loading...</ThemedText>) : (
-        <Button title="Search" onPress={handleSubmit} />
+          <Button mode="contained" onPress={handleSubmit}>Search</Button>
       )}
-
-      <ThemedText type="title">Select Search Parameters</ThemedText>
-      <ThemedView style={styles.buttonsArea}>
-        
-      {/* <Pressable style={({ pressed }) => [styles.button,
-        { backgroundColor: pressed ? '#0056b3' : '#007BFF' },]} onPress={() => addParam("price")}>
-          <ThemedText style={styles.buttonText}>Price</ThemedText>
-      </Pressable>
-        <Pressable style={({ pressed }) => [styles.button,
-        { backgroundColor: pressed ? '#0056b3' : '#007BFF' },]} onPress={() => addParam("description")}>
-          <ThemedText style={styles.buttonText}>Description</ThemedText>
-        </Pressable>
-        <Pressable style={({ pressed }) => [styles.button,
-        { backgroundColor: pressed ? '#0056b3' : '#007BFF' },]} onPress={() => addParam("sustainability")}>
-          <ThemedText style={styles.buttonText}>Sustainability</ThemedText>
-        </Pressable>
-        <Pressable style={({ pressed }) => [styles.button,
-        { backgroundColor: pressed ? '#0056b3' : '#007BFF' },]} onPress={() => addParam("quality")}>
-          <ThemedText style={styles.buttonText}>Quality</ThemedText>
-        </Pressable> */}
-      </ThemedView>
-
     </ThemedView>
-    // {/* </PaperProvider> */}
   );
 }
 
@@ -105,18 +78,19 @@ const styles = StyleSheet.create({
   allContainer: {
     flex: 1, // Makes the container take up the entire screen
     top: 200,
-    alignItems: 'center', // Centers horizontally
+    flexDirection: 'column',
+    alignItems: 'center',
     backgroundColor: '#f0f0f0',
   },
-  input: {
+  textInput: {
     marginTop: 20,
-    height: 40,
-    width: '80%',
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    backgroundColor: '#fff',
+    marginBottom: 20,
+    height: 40, // Adjust the height to reduce the vertical size
+    width: "80%", // Set the width to make it responsive
+    fontSize: 16, // Adjust text size
+    paddingHorizontal: 10, // Add padding inside the input
+    paddingVertical: 10,
+    backgroundColor: "#fff", // Optional: change background color
   },
   output: {
     marginTop: 20,

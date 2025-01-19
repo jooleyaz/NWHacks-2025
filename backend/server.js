@@ -4,7 +4,6 @@ import express from "express";
 import dotenv from "dotenv";
 
 dotenv.config();
-
 const app = express();
 app.use(express.json());
 
@@ -15,14 +14,33 @@ const firecrawlApp = new FirecrawlApp({
 const schema = z.object({
     product_price: z.number(),
     product_description: z.string(),
+    product_sustainability: z.string(),
+    product_quality: z.string(),
 });
 
-app.post('/scrape', async (req, res) => {
-    const {url} = req.body;
+app.post('/extract', async (req, res) => {
+    const [url] = req.body;
 
     try {
-        const scrapeResult = await firecrawlApp.extract([url], {
-            prompt: "Find information about the product quality and suitability for the user, by extracting product price and product description from the site.",
+        // for (item in url) {
+        //     const testScrape = await firecrawlApp.scrapeUrl(url, { formats: ['markdown'] });
+        //     if (!testScrape.success) {
+        //         const index = url.indexOf(item)
+        //         if (index > -1) { // only splice array when item is found
+        //             array.splice(index, 1); // 2nd parameter means remove one item only
+        //         }
+        //     }
+        // }
+
+        const scrapeResult = await firecrawlApp.extract(url, {
+            prompt: `Find information about the product from the URLs given. 
+            Obtain the price from the official seller.
+            Obtain the product description from the official seller.
+            Obtain information about how sustainable and ethical the product is by examining information about the manufacturer,
+            any official listed sustainability/ethics information from the seller,
+            and any comments by reviewers, if available. If this is not found, tell the user that they should look into the sustainability of the
+            product as it was not explicitly mentioned, which may be a red flag.
+            Obtain information about product quality by weighing the pros and cons of user reviews, especially looking for longevity and ease of use information.`,
             schema: schema,
         });
 
@@ -32,7 +50,7 @@ app.post('/scrape', async (req, res) => {
 
         res.json(scrapeResult.data);
     } catch (err) {
-        res.status(500).json({error: err.message});
+        res.status(500).json({ error: err.message });
     }
 });
 
